@@ -1,0 +1,34 @@
+
+#!/usr/bin/env bash
+
+#### start ibus for vietnameese input
+
+#ibus-daemon -drx
+
+#### setup 2 mornitor
+# TODO: make more specific to cover more cases, refractor into another script should move to xinit, for easy reload bspwm
+### fix screen tearing for nvidia card
+
+
+#sleep 3
+#### Polybar
+#TODO: refractor script
+polybar bspwm_top& >> /dev/null
+polybar bspwm_2ndmorn& >> /dev/null
+
+### set audio to 100%
+#TODO: Change to pulseaudio, for mdp and cava
+
+
+#start-pulseaudio-x11
+#nm-applet&
+#blueberry-tray&
+#echo "load success fuully"
+#### set wallpaper
+
+
+#sxhkd&
+
+
+
+

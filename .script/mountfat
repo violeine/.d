@@ -1,0 +1,5 @@
+#!/bin/bash
+#mount VFAT with full rw (read-write) permissions for all users
+#/usr/bin/mount -i -t vfat -oumask=0000,iocharset=utf8 "$@"
+#The above is the same as
+mount -i -t vfat -oiocharset=utf8,fmask=0000,dmask=0000 "$@"

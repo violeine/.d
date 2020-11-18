@@ -1,0 +1,414 @@
+"Plugin Stuff {{{1
+if empty(glob('~/.vim/autoload/plug.vim'))
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+call plug#begin(expand('~/.vim/plugged'))
+"{{{2 theme plugin & eye candy stuff
+  Plug 'joshdick/onedark.vim'
+  Plug 'dylanaraps/wal.vim'
+  Plug 'itchyny/lightline.vim'
+  Plug 'nanotech/jellybeans.vim'
+  let g:jellybeans_overrides = {
+        \    'ColorColumn' : {'guibg' : '1c1c1c'},
+        \    'background' : {'ctermfg' : 'none' , '256ctermbg':'none'}
+\}
+  Plug 'nathanaelkane/vim-indent-guides'
+  "highlighted yank
+  Plug 'machakann/vim-highlightedyank'
+  "{{{2 git stuff
+  Plug 'tpope/vim-fugitive'
+  Plug 'airblade/vim-gitgutter'
+  "better edit and navigate{{{2
+  Plug 'tpope/vim-obsession'
+  Plug 'tpope/vim-surround'
+  Plug 'tpope/vim-commentary'
+  Plug 'tpope/vim-unimpaired'
+  Plug 'tpope/vim-repeat'
+  Plug 'tmsvg/pear-tree'
+  let g:pear_tree_ft_disabled = ["lisp", "scheme", "fennel"]
+  let g:pear_tree_repeatable_expand=0
+  Plug 'mattn/emmet-vim'
+  let g:user_emmet_leader_key = '<C-s>'
+  Plug 'wellle/targets.vim'
+  Plug 'justinmk/vim-dirvish'
+  Plug 'andymass/vim-matchup'
+  ""{{{matchup config
+  "map ,z to z% avoid conflict with sneak
+  nmap ,% <plug>(matchup-z%)
+  "Enable surround
+  let g:matchup_surround_enabled = 1
+  omap ,% <plug>(matchup-o_)<plug>(matchup-z%)
+  xmap ,% <plug>(matchup-z%)
+  ""}}}
+  Plug 'justinmk/vim-sneak'
+  Plug 'junegunn/fzf.vim'
+  "Syntax highlight and languague server stuff{{{2
+  if has('nvim')
+    Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'yarn install --frozen-lockfile'}
+    Plug 'norcalli/nvim-colorizer.lua'
+    "Plug 'lambdalisue/suda.vim'
+    "  let g:suda_smart_edit=1
+    Plug 'maxmellon/vim-jsx-pretty'
+      let g:polyglot_disabled = ['jsx']
+  endif
+  Plug 'sheerun/vim-polyglot'
+  Plug 'rust-lang/rust.vim'
+  let g:rustfmt_autosave = 1
+  "}}}
+  "Lisp Stuff {{{2
+  Plug 'bakpakin/fennel.vim' "Fennel
+  Plug 'w0rp/ale',{'for' : 'clojure'} "linter for clojure
+  Plug 'clojure-vim/vim-jack-in'
+  Plug 'tpope/vim-dispatch'
+  Plug 'clojure-vim/clojure.vim'
+  let g:clojure_fuzzy_indent_patterns = [
+        \ '^with', '^def', '^let', '^\w\+-let'
+        \ ]
+""  Plug 'eraserhd/parinfer-rust',{'do':'cargo build --release'} "parinfer for vim ?
+  Plug 'guns/vim-sexp'  "clojure edit and textobject
+  Plug 'tpope/vim-sexp-mappings-for-regular-people' "sane mappings for vim-sexp
+  let g:sexp_filetypes = 'fennel,clojure,scheme,lisp,timl'
+  if has("nvim")
+  Plug 'Olical/conjure', {'tag': 'v4.8.0'}
+  let g:conjure#log#wrap = v:true
+  endif
+  Plug 'junegunn/rainbow_parentheses.vim' "colors paren cuz why not
+  let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+  let g:rainbow#blacklist=[248,59,238]
+  "let g:rainbow#max_level=16
+  Plug 'wlangstroth/vim-racket'
+  Plug 'jpalardy/vim-slime',{'for':'racket'}
+  let g:slime_paste_file ="$HOME/.slime_paste"
+  let g:slime_target="tmux"
+  let g:slime_default_config = {"socket_name": "default" , "target_pane": "1"}
+  "}}}
+call plug#end()
+
+"{{{1 config
+"{{{2 some sanity
+set ttyfast
+set encoding=UTF-8
+set hidden
+set relativenumber number
+set laststatus=2 "Always have statusline
+set showcmd
+"set noswapfile
+set updatetime=200
+set shortmess+=c
+set signcolumn=yes
+set ruler
+set lazyredraw
+set mouse=a "use mouse
+set nostartofline
+"}}}
+"{{{use rg as vimgrep
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --no-heading\ --smartcase
+    set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+"}}}
+"augroup that get all autocmd
+augroup vimrc
+  autocmd!
+augroup END
+"fast switch between mode
+set ttimeout
+set ttimeoutlen=10
+"search stuff{{{
+"ignore directory & and cases
+set wildignore+=**/node_modules/**,**/.git/**
+set wildignorecase
+set path+=.,** "better find use case
+"set wild menu for vim and popup for nvim
+set wildmenu
+set ignorecase
+set smartcase "only smart when i told u to
+
+"increment hightlight when search
+set incsearch
+set hlsearch
+"nvim specific
+if has("nvim")
+  set wildoptions=pum
+  set pumblend=20
+  set inccommand=nosplit
+  highlight SignColumn guibg=none
+  highlight ColorColumn guibg=LightGray
+endif
+"}}}
+"{{{backup and undo
+"no backup pls, me use git
+set nobackup
+set nowritebackup
+"but i do use undo
+set undofile
+set undodir=$HOME/.vim/file/undo
+set undolevels=1000
+set undoreload=10000
+set sessionoptions-=options
+"}}}
+"Fold default to indent
+set foldmethod=indent
+set foldlevelstart=99
+"better split
+set splitbelow
+set splitright
+"set scroll off, cursor never go to end of viewport
+set scrolloff=5
+"80 char/line
+set textwidth=0
+set colorcolumn=80
+set linebreak
+"set clipboard to +
+set clipboard=unnamedplus
+"Normal backspace over autoindent, line break,
+set backspace=indent,eol,start
+  "auto remove trailing spaces
+autocmd vimrc BufWritePre * %s/\s\+$//e
+  "auto Resize when inside tmux
+autocmd vimrc VimResized * :wincmd=
+  "No auto comment code
+autocmd vimrc FileType * set formatoptions-=cro
+"{{{2 indent
+set softtabstop=2
+set shiftwidth=2
+set shiftround
+set expandtab
+set smarttab
+set autoindent
+set cindent
+filetype plugin indent on
+"{{{1 ColorScheme and theme
+"256-color for st and friends
+if exists('+termguicolors') || ($TERM == "tmux-256color")
+      let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+      let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+      set termguicolors
+      lua require'colorizer'.setup()
+      let g:jellybeans_overrides['background']['guibg'] = 'none'
+endif
+colorscheme onedark
+set cursorline
+set bg=dark
+set noshowmode "cuz i already use lightline
+"hidden char stuff
+set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:·
+"set list "show white space as a character
+"set cursor for vim
+if !has("nvim")
+  let &t_SI = "\<Esc>[6 q"
+  let &t_SR = "\<Esc>[4 q"
+  let &t_EI = "\<Esc>[2 q"
+endif
+"{{{1 Mapping
+let mapleader=" "
+let maplocalleader=","
+nnoremap <M-;> ,
+" turn off hlseacrh until next search
+nnoremap <ESC><ESC> :nohlsearch<CR>
+nnoremap ' `
+nnoremap ` '
+  "Pause Obsession then quit all
+nnoremap ZS :Obsession<CR>:xa<CR>
+nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+nnoremap ]w gt
+nnoremap [w gT
+nnoremap Q gq
+" Copy paste from clipboard
+vmap <Leader>d "+d
+nmap <Leader>p "+p
+nmap <Leader>P "+P
+vmap <Leader>p "+p
+map <Leader>P "+P
+vmap <Leader>y "+y
+"make Y behavior like C, D
+nnoremap Y y$
+" Reload vimrc
+if !has("nvim") " mapping for vim only
+  cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+endif
+" Easy close help
+autocmd vimrc Filetype help nnoremap <buffer> q :q<CR>
+" Save last help location
+" Easy close commandline window (the q: one )
+autocmd vimrc CmdwinEnter * nmap <buffer> <esc><esc> :q<cr>
+nnoremap <Leader>b :Buffers<CR>
+nnoremap <Leader>o :FZF<CR>
+"move line by line
+"https://www.reddit.com/r/vim/comments/i8b5z1/
+"s for up d for down a for left f for right
+nnoremap <A-s> :<C-u>move-2<CR>==
+nnoremap <A-d> :<C-u>move+<CR>==
+xnoremap <A-s> :move-2<CR>='[gv
+xnoremap <A-d> :move'>+<CR>='[gv
+"{{{1 CoC nVim mapping
+if has("nvim")
+  let g:coc_config_home="~/.vim/"
+  "some basic extensions{{{
+  let g:coc_global_extensions=[
+        \'coc-json',
+        \'coc-conjure',
+        \'coc-tsserver',
+        \'coc-eslint',
+        \'coc-marketplace',
+        \'coc-prettier'
+        \]
+  "}}}
+"Ctrl-Space to toggle auto complete
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+  " Remap keys for gotos
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
+  nmap <silent> [g <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+  " Use K to show documentation in preview window
+  nnoremap <silent> <leader>K :call <SID>show_documentation()<CR>
+
+  " Use hl to highlight the symbol under the cursor
+  nnoremap <silent> <Leader>hl :call CocActionAsync('highlight')<CR>
+  function! s:show_documentation()
+    if (index(['vim','help'], &filetype) >= 0)
+      execute 'h '.expand('<cword>')
+    else
+      call CocAction('doHover')
+    endif
+  endfunction
+autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+endif
+"--------------------------------------------------------
+"clojure/lisp config {{{1
+"this let parinfer do the talking
+let g:sexp_enable_insert_mode_mappings=0
+let g:conjure#mapping#prefix = ","
+let g:conjure#mapping#eval_motion= ["cp"]
+"disable alt h j k l
+ let g:sexp_mappings = {
+       \ 'sexp_flow_to_next_open':'<M-[>',
+       \ 'sexp_flow_to_prev_open':'<M-{>',
+       \ 'sexp_flow_to_next_close':'<M-]>',
+       \ 'sexp_flow_to_prev_close':'<M-}>',
+       \ 'sexp_select_prev_element':'',
+       \ 'sexp_select_next_element': ''
+       \}
+"rainbow for clojure only
+augroup rainbow_lisp
+  autocmd!
+  autocmd FileType lisp,clojure,scheme,fennel RainbowParentheses
+  autocmd FileType clojure let g:ale_linters={'clojure':['clj-kondo']}
+  autocmd FileType clojure
+        \ autocmd BufWritePre <buffer> call CocActionAsync('format')
+augroup END
+"{{{1 STATUS LINE/LIGHTLINE
+"{{{ Check styling under the cursor
+" Shamelessly taken from https://github.com/tpope/vim-scriptease
+function! FaceNames(...) abort
+  if a:0
+    let [line, col] = [a:1, a:2]
+  else
+    let [line, col] = [line('.'), col('.')]
+  endif
+  return reverse(map(synstack(line, col), 'synIDattr(v:val,"name")'))
+endfunction
+
+function! DescribeFace(count) abort
+  if a:count
+    let name = get(FaceNames(), a:count-1, '')
+    if name !=# ''
+      return 'syntax list '.name
+    endif
+  else
+    echo join(FaceNames(), ' ')
+  endif
+  return ''
+endfunction
+
+nnoremap <leader>1 :<C-U>exe DescribeFace(v:count)<CR>
+"}}}
+"{{{ When editing a file, always jump to the last known cursor position.
+" Don't do it when the position is invalid or when inside an event handler
+" (happens when dropping a file on gvim).
+" Also don't do it when the mark is in the first line, that is the default
+" position when opening a file.
+autocmd vimrc BufReadPost *
+  \ if line("'\"") > 1 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
+"}}}
+"{{{DrawGitBranchInfo
+function! DrawGitBranchInfo()
+  let branch = fugitive#head()
+  return len(branch) > 0 ? " " . branch : ""
+endfunction
+
+function! LightLineFilename()
+  let name = ""
+  let subs = split(expand('%'), "/")
+  let i = 1
+  for s in subs
+    let parent = name
+    if  i == len(subs)
+      let name = len(parent) > 0 ? parent . '/' . s : s
+    elseif i == 1
+      let name = s
+    else
+      let part = strpart(s, 0, 10)
+      let name = len(parent) > 0 ? parent . '/' . part : part
+    endif
+    let i += 1
+  endfor
+  return name
+endfunction
+"}}}
+let g:lightline = {
+     \'colorscheme': 'onedark',
+      \'active': {
+      \   'left': [ ['filetype'], [ 'cocstatus' ], [ 'filename' ] ],
+      \   'right': [ [ 'icongitbranch'], ['lineinfo' ,'sessionstatus']]
+      \ },
+      \ 'inactive': {
+      \   'left': [ [], ['fileicon'], [ 'filename' ] ],
+      \   'right': []
+      \ },
+      \ 'tabline' : {
+      \   'left': [['tabs']],
+      \   'right': [['close']]
+      \},
+      \ 'component': { 'lineinfo': ' %2p%% %3l:%-2v' },
+      \ 'component_function': {
+      \   'icongitbranch': 'DrawGitBranchInfo',
+      \   'iconline': 'DrawLineInfo',
+      \   'gitbranch': 'fugitive#head',
+      \   'cocstatus': 'coc#status',
+      \   'filename': 'LightLineFilename',
+      \   'sessionstatus':'ObsessionStatus'
+      \ },
+      \ }
+" vim: set foldmethod=marker foldlevel=1 nomodeline:
