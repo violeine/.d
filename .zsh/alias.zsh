@@ -1,5 +1,5 @@
 ali="$HOME/.zsh/alias.zsh"
-alias dot='/usr/bin/git --git-dir=/home/violeine/.dot.git/ --work-tree=$HOME'
+alias d='/usr/bin/git --git-dir=/home/violeine/.dot.git/ --work-tree=$HOME'
 alias dotsub='dot submodule '
 alias dota='dot add -u ~'
 alias dotst='dot status'

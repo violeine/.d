@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+!/usr/bin/env bash
 #
 #
 
@@ -12,7 +12,7 @@ not_in_tmux(){
 	[[ -z "$TMUX" ]]
 }
 
-if not_in_tmux; then 
+if not_in_tmux; then
 	tmux new -As "$session_name"
 else
 	if ! session_exists; then
