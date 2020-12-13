@@ -8,8 +8,8 @@ endfunction
                 \ '[': {'closer': ']'},
                 \ '{': {'closer': '}'},
                 \ }
- let b:pear_smart_openers=1
- let b:pear_smart_closers=1
+ let b:pear_smart_openers=0
+ let b:pear_smart_closers=0
   imap <M-CR> <Plug>(PearTreeExpand)
 nnoremap <silent> crcc :call CocRequest('clojure-lsp', 'workspace/executeCommand', {'command': 'cycle-coll', 'arguments': [Expand('%:p'), line('.') - 1, col('.') - 1]})<CR>
 nnoremap <silent> crth :call CocRequest('clojure-lsp', 'workspace/executeCommand', {'command': 'thread-first', 'arguments': [Expand('%:p'), line('.') - 1, col('.') - 1]})<CR>
