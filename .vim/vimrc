@@ -63,6 +63,8 @@ call plug#begin(expand('~/.vim/plugged'))
        \ 'sexp_flow_to_prev_open':'<M-{>',
        \ 'sexp_flow_to_next_close':'<M-]>',
        \ 'sexp_flow_to_prev_close':'<M-}>',
+       \ 'sexp_round_head_wrap_list':'<LocalLeader>(',
+       \ 'sexp_round_tail_wrap_list':'<LocalLeader>)',
        \ 'sexp_select_prev_element':'',
        \ 'sexp_select_next_element': ''
        \}
@@ -80,7 +82,7 @@ let g:vlime_window_settings = {
       \ "xref": { "pos": "belowright", "size": 5, "vertical": v:false },
       \ "repl": { "pos": "belowright", "size": 10, "vertical": v:false },
       \ "inspector": { "pos": "belowright", "vertical": v:false },
-      \ "arglist": { "pos": "botright", "size": 1, "vertical": v:false }
+      \ "arglist": { "pos": "belowright", "size": 2, "vertical": v:false }
       \ }
   "Clojure {{{4
   Plug 'w0rp/ale',{'for' : 'clojure'} "linter for clojure
@@ -99,6 +101,7 @@ let g:vlime_window_settings = {
   if has('nvim')
     Plug 'norcalli/nvim-colorizer.lua'
     Plug 'neovim/nvim-lspconfig'
+    Plug 'nvim-lua/lsp-status.nvim'
     Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
     Plug 'nvim-treesitter/playground'
     Plug 'nvim-lua/completion-nvim'
@@ -224,7 +227,8 @@ endif
 "{{{1 lua
 if has("nvim")
   lua require'config'.setup()
-autocmd vimrc BufEnter * lua require'completion'.on_attach()
+  autocmd vimrc BufEnter * lua require'completion'.on_attach()
+  autocmd CursorHold * lua vim.lsp.diagnostic.show_line_diagnostics()
 endif
 "{{{1 Mapping
 let mapleader=" "
@@ -267,8 +271,7 @@ nnoremap <A-s> :<C-u>move-2<CR>==
 nnoremap <A-d> :<C-u>move+<CR>==
 xnoremap <A-s> :move-2<CR>='[gv
 xnoremap <A-d> :move'>+<CR>='[gv
-" auto complete stuff
-
+" {{{2auto complete stuff
 if has("nvim")
 imap <tab> <Plug>(completion_smart_tab)
 imap <s-tab> <Plug>(completion_smart_s_tab)
@@ -303,7 +306,9 @@ endif
 augroup rainbow_lisp
   autocmd!
   autocmd FileType lisp,clojure,scheme,fennel RainbowParentheses
+  " autocmd FileType vlime_arglist setlocal laststatus=0
 augroup END
+
 "{{{1 STATUS LINE/LIGHTLINE
 "{{{ Check styling under the cursor with Leader1
 " Shamelessly taken from https://github.com/tpope/vim-scriptease
@@ -366,10 +371,21 @@ function! LightLineFilename()
   return name
 endfunction
 "}}}
+"{{{2 lsp status
+if has("nvim")
+function! LspStatus() abort
+  if luaeval('#vim.lsp.buf_get_clients() > 0')
+    return luaeval("require('lsp-status').status()")
+  endif
+
+  return ''
+endfunction
+endif
+" Line light{{{2
 let g:lightline = {
      \'colorscheme': 'onedark',
       \'active': {
-      \   'left': [ ['filetype'], [ 'filename' ] ],
+      \   'left': [ ['filetype'], ['lspstatus'],[ 'filename' ] ],
       \   'right': [ [ 'icongitbranch'], ['lineinfo' ,'sessionstatus']]
       \ },
       \ 'inactive': {
@@ -385,9 +401,10 @@ let g:lightline = {
       \   'icongitbranch': 'DrawGitBranchInfo',
       \   'iconline': 'DrawLineInfo',
       \   'gitbranch': 'fugitive#head',
-      \   'cocstatus': 'coc#status',
       \   'filename': 'LightLineFilename',
-      \   'sessionstatus':'ObsessionStatus'
+      \   'sessionstatus':'ObsessionStatus',
+      \   'lspstatus':'LspStatus'
       \ },
       \ }
 " vim: set foldmethod=marker foldlevel=0 nomodeline:
+
