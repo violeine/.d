@@ -1,6 +1,7 @@
-"{{{1 setup
+"{{{1 setunp
 "set vimrc to .vim
 let $MYVIMRC="$HOME/.vim/vimrc"
+let $NVIM_LISPWORDS="$HOME/.lispwords.lua"
 "augroup that get all autocmd
 augroup vimrc
   autocmd!
@@ -17,6 +18,7 @@ call plug#begin(expand('~/.vim/plugged'))
   Plug 'joshdick/onedark.vim'
   Plug 'itchyny/lightline.vim'
   Plug 'nathanaelkane/vim-indent-guides'
+  Plug 'haishanh/night-owl.vim'
   "highlighted yank
   Plug 'machakann/vim-highlightedyank'
   "{{{2 git stuff
@@ -35,6 +37,9 @@ call plug#begin(expand('~/.vim/plugged'))
   Plug 'wellle/targets.vim'
   Plug 'justinmk/vim-dirvish'
   Plug 'andymass/vim-matchup'
+  Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
+  let g:undotree_WindowLayout = 2
+    nnoremap U :UndotreeToggle<CR>
   ""{{{matchup config
   "map ,z to z% avoid conflict with sneak
   nmap ,% <plug>(matchup-z%)
@@ -48,13 +53,28 @@ call plug#begin(expand('~/.vim/plugged'))
   "Language {{{2
   Plug 'maxmellon/vim-jsx-pretty'
  let g:polyglot_disabled = ['jsx']
+  " Plug 'w0rp/ale' "linter/fixer
+  " let g:ale_disable_lsp = 1
+  " let g:ale_floating_preview = 1
+  " let g:ale_hover_to_floating_preview = 1
+  " let g:ale_cursor_detail =1
+  " let g:ale_echo_cursor =0
+  " let g:ale_close_preview_on_insert=1
+  " let g:ale_fix_on_save = 1
+  " let g:ale_echo_delay=100
+  " let g:ale_javascript_eslint_use_global = 1
+  " let g:ale_javascript_prettier_use_global=1
+  " let g:ale_fixers = {
+  "   \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+  "   \   'javascript': ['prettier', 'eslint'],
+  "   \}
   Plug 'sheerun/vim-polyglot'
   Plug 'rust-lang/rust.vim'
-  let g:rustfmt_autosave = 1
+  let g:rustfmt_autosave = 2
   "Lisp Stuff {{{3
   "{{{4 Edit
-  Plug 'guns/vim-sexp'
-  Plug 'tpope/vim-sexp-mappings-for-regular-people' "sane mappings for vim-sexp
+ Plug 'guns/vim-sexp'
+ Plug 'tpope/vim-sexp-mappings-for-regular-people' "sane mappings for vim-sexp
   let g:sexp_filetypes = 'fennel,clojure,scheme,lisp,timl'
   "disable insert
   let g:sexp_enable_insert_mode_mappings=0
@@ -70,23 +90,26 @@ call plug#begin(expand('~/.vim/plugged'))
        \}
   "}}}
   "rainbow
-  Plug 'junegunn/rainbow_parentheses.vim' "colors paren cuz why not
-  let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
-  let g:rainbow#blacklist=[248,59,238]
-
+  " Plug 'junegunn/rainbow_parentheses.vim' "colors paren cuz why not
+  " let g:rainbow#pairs = [['(', ')'], ['[', ']'], ['{', '}']]
+  " let g:rainbow#blacklist=[248,59,238]
+  Plug 'luochen1990/rainbow'
+  let g:rainbow_active = 1
+  Plug 'jpalardy/vim-slime', {'for': ['scheme', 'racket']}
   Plug 'bakpakin/fennel.vim' "Fennel
   Plug 'vlime/vlime', {'rtp': 'vim/'} "Common lisp
-let g:vlime_enable_autodoc=v:true
-let g:vlime_window_settings = {
+  let g:vlime_leader=',r'
+  let g:vlime_enable_autodoc=v:true
+  let g:vlime_window_settings = {
       \ "sldb": { "pos": "belowright", "vertical": v:false },
       \ "xref": { "pos": "belowright", "size": 5, "vertical": v:false },
-      \ "repl": { "pos": "belowright", "size": 10, "vertical": v:false },
+      \ "repl": { "pos": "botright", "size": v:null, "vertical": v:true },
       \ "inspector": { "pos": "belowright", "vertical": v:false },
       \ "arglist": { "pos": "belowright", "size": 2, "vertical": v:false }
       \ }
   "Clojure {{{4
-  Plug 'w0rp/ale',{'for' : 'clojure'} "linter for clojure
   Plug 'clojure-vim/clojure.vim'
+  let g:clojure_fuzzy_indent = 1
   let g:clojure_fuzzy_indent_patterns = [
         \ '^with', '^def', '^let', '^\w\+-let'
         \ ]
@@ -211,7 +234,7 @@ if exists('+termguicolors') || ($TERM == "tmux-256color")
       lua require'colorizer'.setup()
     endif
 endif
-colorscheme onedark
+colorscheme night-owl
 set cursorline
 set bg=dark
 set noshowmode "cuz i already use lightline
@@ -260,7 +283,7 @@ endif
 " Easy close help
 autocmd vimrc Filetype help nnoremap <buffer> q :q<CR>
 " Save last help location
-" Easy close commandline window (the q: one )
+" Easy close commandline window (the q: one)
 autocmd vimrc CmdwinEnter * nmap <buffer> <esc><esc> :q<cr>
 nnoremap <Leader>b :Buffers<CR>
 nnoremap <Leader>o :FZF<CR>
@@ -298,14 +321,20 @@ let g:completion_chain_complete_list = {
 \}
 let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy', 'all']
 let g:completion_trigger_keyword_length = 3 " default = 1
+let g:completion_confirm_key = "\<C-y>"
 imap <m-j> <Plug>(completion_next_source)
 imap <m-k> <Plug>(completion_prev_source)
 endif
 
 "clojure/lisp config {{{1
+  let g:slime_paste_file ="$HOME/.slime_paste"
+  let g:slime_target="tmux"
+  let g:slime_default_config = {"socket_name": "default" , "target_pane": "1"}
 augroup rainbow_lisp
   autocmd!
-  autocmd FileType lisp,clojure,scheme,fennel RainbowParentheses
+  " autocmd FileType lisp,clojure,scheme,fennel RainbowParentheses
+  autocmd FileType scheme,racket setlocal equalprg=scmindent
+  autocmd FileType scheme,racket nmap cp <Plug>SlimeMotionSend
   " autocmd FileType vlime_arglist setlocal laststatus=0
 augroup END
 
@@ -377,13 +406,12 @@ function! LspStatus() abort
   if luaeval('#vim.lsp.buf_get_clients() > 0')
     return luaeval("require('lsp-status').status()")
   endif
-
   return ''
 endfunction
 endif
 " Line light{{{2
 let g:lightline = {
-     \'colorscheme': 'onedark',
+     \'colorscheme': 'nightowl',
       \'active': {
       \   'left': [ ['filetype'], ['lspstatus'],[ 'filename' ] ],
       \   'right': [ [ 'icongitbranch'], ['lineinfo' ,'sessionstatus']]
@@ -406,5 +434,14 @@ let g:lightline = {
       \   'lspstatus':'LspStatus'
       \ },
       \ }
-" vim: set foldmethod=marker foldlevel=0 nomodeline:
 
+let g:pear_tree_pairs = {
+    \   '(': {'closer': ')'},
+    \   '[': {'closer': ']'},
+    \   '{': {'closer': '}'},
+    \   '"': {'closer': '"'},
+    \   "'": {'closer': "'"},
+    \  "\*": {'closer': "*"}
+    \ }
+
+" vim: set foldmethod=marker foldlevel=0 nomodeline:
