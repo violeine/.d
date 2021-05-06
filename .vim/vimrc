@@ -30,6 +30,7 @@ call plug#begin(expand('~/.vim/plugged'))
   Plug 'tpope/vim-commentary'
   Plug 'tpope/vim-unimpaired'
   Plug 'tpope/vim-repeat'
+  Plug 'tpope/vim-sleuth'
   Plug 'tmsvg/pear-tree'
   let g:pear_tree_repeatable_expand=0
   Plug 'mattn/emmet-vim'
@@ -68,7 +69,7 @@ call plug#begin(expand('~/.vim/plugged'))
   "   \   '*': ['remove_trailing_lines', 'trim_whitespace'],
   "   \   'javascript': ['prettier', 'eslint'],
   "   \}
-  Plug 'sheerun/vim-polyglot'
+  " Plug 'sheerun/vim-polyglot'
   Plug 'rust-lang/rust.vim'
   let g:rustfmt_autosave = 2
   "Lisp Stuff {{{3
@@ -216,11 +217,13 @@ autocmd vimrc BufWritePre * %s/\s\+$//e
 autocmd vimrc VimResized * :wincmd=
 " }}}
 "{{{2 indent
+set list
+set tabstop=2
 set softtabstop=2
 set shiftwidth=2
 set shiftround
 set expandtab
-set smarttab
+" set smarttab
 set autoindent
 set cindent
 filetype plugin indent on
