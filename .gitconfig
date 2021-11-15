@@ -3,3 +3,5 @@
 	name = violeine
 [init]
 	defaultBranch = main
+[includeIf "gitdir:~/be/"]
+    path = ~/be/.gitconfig
