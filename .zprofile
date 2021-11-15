@@ -1,4 +1,4 @@
-XDG_CONFIG_HOME="/home/violeine/.config"
+XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CONFIG_HOME
 export QT_QPA_PLATFORMTHEME="qt5ct"
 #if systemctl -q is-active graphical.target && [[ ! $DISPLAY && $XDG_VTNR -eq 1 ]]; then

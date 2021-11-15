@@ -51,9 +51,11 @@ call plug#begin(expand('~/.vim/plugged'))
   ""}}}
   Plug 'justinmk/vim-sneak'
   Plug 'junegunn/fzf.vim'
+  Plug '/usr/local/opt/fzf'
   "Language {{{2
   Plug 'maxmellon/vim-jsx-pretty'
  let g:polyglot_disabled = ['jsx']
+<<<<<<< Updated upstream
   " Plug 'w0rp/ale' "linter/fixer
   " let g:ale_disable_lsp = 1
   " let g:ale_floating_preview = 1
@@ -70,7 +72,8 @@ call plug#begin(expand('~/.vim/plugged'))
   "   \   'javascript': ['prettier', 'eslint'],
   "   \}
   " Plug 'sheerun/vim-polyglot'
-  Plug 'rust-lang/rust.vim'
+ " Plug 'neoclide/coc.nvim', {'branch': 'master', 'do' : 'yarn install --forzen-lockfile'}
+  Plug 'sheerun/vim-polyglot'
   let g:rustfmt_autosave = 2
   "Lisp Stuff {{{3
   "{{{4 Edit

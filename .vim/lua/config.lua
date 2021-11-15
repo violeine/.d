@@ -138,7 +138,7 @@ function setup()
       client.resolved_capabilities.document_formatting = false
       my_attach(client)
     end,
-    capabilities = lsp_status.capabilities,
+      capabilities = lsp_status.capabilities,
     root_dir = lsp.util.root_pattern("package.json", "tsconfig.json", ".git")
   };
 lsp.cssls.setup {

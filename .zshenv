@@ -1,6 +1,6 @@
 #path
-export PATH=$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.script:$HOME/.node_modules/bin:$HOME/.config/composer/vendor/bin:$PATH
-export npm_config_prefix=~/.node_modules
+export PATH=$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.script:$HOME/.config/composer/vendor/bin:$PATH
+# export npm_config_prefix=~/.node_modules
 #set editor to nvim
 export EDITOR=nvim
 #use fzf and rg for better experience

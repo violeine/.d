@@ -23,8 +23,6 @@ alias lsa='ls -lah'
 alias l='ls -lah'
 alias la='ls -lAh'
 alias ll='ls -lh'
-alias ls='ls --color=tty --group-directories-first'
-alias :v='sudo pacman'
 #chicken
 
 alias csi='chicken-csi'
