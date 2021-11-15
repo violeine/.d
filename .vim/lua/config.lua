@@ -141,7 +141,12 @@ function setup()
     capabilities = lsp_status.capabilities,
     root_dir = lsp.util.root_pattern("package.json", "tsconfig.json", ".git")
   };
-
+lsp.cssls.setup {
+    on_attach = function(client)
+      client.resolved_capabilities.document_formatting = false
+      my_attach(client)
+    end,
+};
   --- treesitter
   nvim_ts.setup {
     ensure_installed = "maintained",
