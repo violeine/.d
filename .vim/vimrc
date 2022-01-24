@@ -55,7 +55,6 @@ call plug#begin(expand('~/.vim/plugged'))
   "Language {{{2
   Plug 'maxmellon/vim-jsx-pretty'
  let g:polyglot_disabled = ['jsx']
-<<<<<<< Updated upstream
   " Plug 'w0rp/ale' "linter/fixer
   " let g:ale_disable_lsp = 1
   " let g:ale_floating_preview = 1

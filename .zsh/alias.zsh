@@ -23,6 +23,7 @@ alias lsa='ls -lah'
 alias l='ls -lah'
 alias la='ls -lAh'
 alias ll='ls -lh'
+alias dl='lazygit --git-dir=$HOME/.dot.git/ --work-tree=$HOME'
 #chicken
 
 alias csi='chicken-csi'
