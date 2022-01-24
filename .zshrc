@@ -11,6 +11,7 @@ source "$HOME/.zinit/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
+export PATH="$PATH:$HOME/.script"
 typeset -g HISTSIZE=290000 SAVEHIST=290000 HISTFILE=~/.zsh_history
 setopt HIST_SAVE_NO_DUPS # Do not write a duplicate event to the history file.
 setopt AUTO_CD
