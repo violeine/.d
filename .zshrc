@@ -42,6 +42,8 @@ bindkey -e #shell with emacs is easier
 autoload -Uz compinit
 compinit
 
+eval "$(zoxide init zsh)"
+
 # if [[ $DISPLAY ]]; then
 # 	[[ $- != *i* ]] && return
 # 	[[ -z "$TMUX" ]] && tat

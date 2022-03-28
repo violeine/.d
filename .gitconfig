@@ -4,7 +4,8 @@
 [init]
 	defaultBranch = main
 [includeIf "gitdir:~/be/"]
-    path = ~/be/.gitconfig
+  path = ~/be/.gitconfig
 [core]
-   excludesfile = ~/.gitignore
+  excludesfile = ~/.gitignore
+  editor = nvim
 

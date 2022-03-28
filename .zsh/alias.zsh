@@ -19,13 +19,14 @@ alias statusd='sudo systemctl status'
 alias stopd='sudo systemctl stop'
 alias serve='php artisan serve --host=0.0.0.0 --port=8000'
 alias sicp='racket -l sicp -i'
+alias ls="exa"
 alias lsa='ls -lah'
 alias l='ls -lah'
 alias la='ls -lAh'
 alias ll='ls -lh'
 alias dl='lazygit --git-dir=$HOME/.dot.git/ --work-tree=$HOME'
+alias lg='lazygit'
 #chicken
-
 alias csi='chicken-csi'
 alias csc='chicken-csc'
 
