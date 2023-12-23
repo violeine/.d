@@ -30,12 +30,12 @@
           # Optionally use extraSpecialArgs
           # to pass through arguments to home.nix
         };
-      };
         "violeine@deck" = home-manager.lib.homeManagerConfiguration {
 
           # Specify your home configuration modules here, for example,
           # the path to your home.nix.
-          modules = [ ./home.nix {
+          modules = [ ./home.nix 
+          {
             home.username = "violeine";
             home.homeDirectory = "/var/home/violeine";
           }
@@ -46,4 +46,5 @@
           # to pass through arguments to home.nix
         };
       };
+    };
     }
