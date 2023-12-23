@@ -30,14 +30,17 @@
           # Optionally use extraSpecialArgs
           # to pass through arguments to home.nix
         };
-        "violeine@deck" = home-manager.lib.homeManagerConfiguration {
+        "violeine@deck" = home-manager.lib.homeManagerConfiguration rec {
 
           # Specify your home configuration modules here, for example,
           # the path to your home.nix.
           modules = [ ./home.nix 
           {
             home.username = "violeine";
-            home.homeDirectory = "/var/home/violeine";
+             home.homeDirectory = "/var/home/violeine";
+             home.sessionVariables = {
+              LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
+           };
           }
           ];
           pkgs = nixpkgs.legacyPackages.x86_64-linux;
