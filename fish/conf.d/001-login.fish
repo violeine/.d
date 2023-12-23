@@ -3,9 +3,8 @@ if status is-interactive
 end
 
 if status is-login
-	eval "$(/opt/homebrew/bin/brew shellenv)"
-	fish_add_path "$(brew --prefix)/opt/python/libexec/bin"
-	zoxide init fish | source
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    fish_add_path "$(brew --prefix)/opt/python/libexec/bin"
 end
 
 # tabtab source for packages
